@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, current_app, send_file
+from flask import Blueprint, render_template, request, flash, redirect, current_app, send_file, after_this_request
 from werkzeug.utils import secure_filename
 from .models import Files
 from . import db
@@ -26,7 +26,6 @@ def upload_file():
             new_file=Files(filename=filename, file_code="x")
             db.session.add(new_file)
             db.session.commit()
-            print("Added")
             flash("File uploaded") 
     
     return render_template("home.html")
@@ -46,5 +45,19 @@ def show_files():
 def download_files(filename):
     DOWNLOAD_DIR = current_app.config['UPLOAD_FOLDER']
     path = DOWNLOAD_DIR + "/" + filename
+
+    @after_this_request
+    def delete_file(response):
+        try:
+            file_entry = Files.query.filter_by(filename=filename).first()
+            if file_entry:
+                os.remove(path)
+                db.session.delete(file_entry)
+                db.session.commit()
+        except Exception as e:
+            flash("Error")
+        
+        return response
+
     return send_file(path, as_attachment=True)
 
