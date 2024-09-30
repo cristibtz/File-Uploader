@@ -1,0 +1,41 @@
+
+services:
+  app:
+    restart: always
+    container_name: flask_app
+    build: ./Project
+    links:
+      - db:db
+    env_file:
+      - .env
+    environment:
+        DEBUG: True
+        POSTGRES_DB: ${POSTGRES_DB}
+        DATABASE_PORT: 5432
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./Project:/app
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+    command: >
+      sh -c "gunicorn -w 4 -b :5000 wsgi:app"
+
+  db:
+    restart: always
+    container_name: postgres_db
+    image: postgres:latest
+    volumes: 
+      - postgres-data:/var/lib/postgresql
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    environment:
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+volumes:
+  postgres-data:
