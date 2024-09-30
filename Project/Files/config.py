@@ -8,3 +8,5 @@ class BaseConfig(object):
     DB_PASS = os.environ['POSTGRES_PASSWORD']
     DB_PORT = os.environ['DATABASE_PORT']
     SQLALCHEMY_DATABASE_URI = f'postgresql://{DB_USER}:{DB_PASS}@db/{DB_NAME}'
+
+pass
