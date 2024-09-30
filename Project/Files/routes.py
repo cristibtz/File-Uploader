@@ -50,7 +50,7 @@ def download_files(filename):
     def delete_file(response):
         try:
             file_entry = Files.query.filter_by(filename=filename).first()
-            if file_entry:
+            if file_entry and filename != ".gitkeep":
                 os.remove(path)
                 db.session.delete(file_entry)
                 db.session.commit()
