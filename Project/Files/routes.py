@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, current_app, send_file, after_this_request
+from flask import Blueprint, render_template, request, flash, redirect, current_app, send_file, after_this_request, url_for
 from werkzeug.utils import secure_filename
 from .models import Files
 from . import db
@@ -27,7 +27,8 @@ def upload_file():
             db.session.add(new_file)
             db.session.commit()
             flash("File uploaded") 
-    
+            return redirect(url_for("upload.upload_file"))
+
     return render_template("home.html")
 
 @upload.app_errorhandler(413)
