@@ -19,7 +19,7 @@ def upload_file():
         if file.filename == '':
             flash("No selected file")
             return redirect(request.url)
-        
+
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_DIR, filename))
@@ -30,11 +30,6 @@ def upload_file():
             return redirect(url_for("upload.upload_file"))
 
     return render_template("home.html")
-
-@upload.app_errorhandler(413)
-def handle_413(error):
-    flash("File is too large")
-    return redirect(request.url), 413
 
 @download.route("/", methods=["GET"])
 def show_files():
@@ -61,4 +56,3 @@ def download_files(filename):
         return response
 
     return send_file(path, as_attachment=True)
-
