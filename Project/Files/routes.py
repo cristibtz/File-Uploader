@@ -27,7 +27,6 @@ def upload_file():
             db.session.add(new_file)
             db.session.commit()
             flash("File uploaded") 
-            return redirect(url_for("upload.upload_file"))
 
     return render_template("home.html")
 
