@@ -30,6 +30,10 @@ def upload_file():
 
     return render_template("home.html")
 
+@upload.errorhandler(413)
+def request_entity_too_large(error):
+    return "File is too large" 
+
 @download.route("/", methods=["GET"])
 def show_files():
     DOWNLOAD_DIR = current_app.config['UPLOAD_FOLDER']
