@@ -27,7 +27,7 @@ services:
       - 5000:5000
     depends_on:
       - db
-    command: >
+    command: > 
       sh -c "python3 ./create_db.py && gunicorn -w 4 -b :5000 wsgi:app"
 
   db:
