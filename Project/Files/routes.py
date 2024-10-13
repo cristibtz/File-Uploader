@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, current_app, send_file, after_this_request, url_for
 from werkzeug.utils import secure_filename
 from .models import Files
+from .create_code import create_code
 from . import db
-import os
+import os, random
 
 upload = Blueprint('upload', __name__)
 download = Blueprint('download', __name__)
@@ -22,11 +23,21 @@ def upload_file():
 
         if file:
             filename = secure_filename(file.filename)
+            file_code = create_code(filename)
+
+            #Check if file is already in directory
+            if Files.query.filter_by(filename=filename).first():
+                #Find extension and add number to filename
+                filename, extension = os.path.splitext(filename)
+                random_number = random.randint(1, 1000)
+                filename = filename + f"_{random_number}" + extension
+
             file.save(os.path.join(UPLOAD_DIR, filename))
-            new_file=Files(filename=filename, file_code="x")
+            new_file=Files(filename=filename, file_code=file_code)
             db.session.add(new_file)
             db.session.commit()
             flash("File uploaded") 
+            return redirect(url_for('upload.upload_file'))
 
     return render_template("home.html")
 

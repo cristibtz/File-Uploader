@@ -9,7 +9,7 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(BaseConfig)
-
+    
     db.init_app(app)
 
     app.config['UPLOAD_FOLDER'] = os.getcwd() + "/uploads"
