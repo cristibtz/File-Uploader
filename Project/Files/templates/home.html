@@ -14,6 +14,9 @@
         <input type="file" name="file" id="file">
         <input type="submit" value="Upload">
     </form>
+    <div id="progressWrapper" style="display: none;">
+        <span id="progressPercent">0%</span>
+    </div>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -34,6 +37,31 @@
         $('#size').show()
 
         });
+
+        $(document).ready(function() {
+        $('#uploadForm').submit(function(event) {
+            //event.preventDefault(); // Prevent the default form submission
+
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+
+            xhr.upload.addEventListener('progress', function(event) {
+                if (event.lengthComputable) {
+                    var percentComplete = (event.loaded / event.total) * 100;
+                    $('#progressPercent').text(Math.round(percentComplete) + '%');
+                }
+            }, false);
+
+            xhr.addEventListener('load', function(event) {
+                $('#progressWrapper').hide();
+            }, false);
+
+            xhr.open('POST', '/upload', true);
+            xhr.send(formData);
+
+            $('#progressWrapper').show();
+            });
+    });
     </script>
 	<!--
     <script>
