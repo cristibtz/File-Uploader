@@ -26,7 +26,6 @@
     {% endwith %}
     {% block body %}{% endblock %}
     <p id="size" style="display: none;"></p>
-	<!--
     <script>
         $('#file').on('change', function() {
         size = parseFloat(this.files[0].size / 1024 / 1024).toFixed(2)
@@ -35,7 +34,9 @@
         $('#size').show()
 
         });
-
+    </script>
+	<!--
+    <script>
         // find file size
         $('#uploadForm').submit(function() {
             size = parseFloat($('#file')[0].files[0].size / 1024 / 1024).toFixed(2)
