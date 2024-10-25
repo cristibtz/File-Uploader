@@ -61,12 +61,13 @@ def download_files(filename):
         try:
             file_entry = Files.query.filter_by(filename=filename).first()
             if file_entry and filename != ".gitkeep":
-                os.remove(path)
                 db.session.delete(file_entry)
                 db.session.commit()
         except Exception as e:
             flash("Error")
         
+        os.remove(path)
+
         return response
 
     return send_file(path, as_attachment=True)
