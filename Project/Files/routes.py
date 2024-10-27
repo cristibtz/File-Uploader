@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, current_app, send_file, after_this_request, url_for
+from flask import Blueprint, render_template, request, flash, redirect, current_app, send_file, after_this_request, url_for, jsonify
 from werkzeug.utils import secure_filename
 from .models import Files
 from .create_code import create_code
@@ -36,10 +36,13 @@ def upload_file():
             new_file=Files(filename=filename, file_code=file_code)
             db.session.add(new_file)
             db.session.commit()
-            flash("File uploaded") 
-            return redirect(url_for('upload.upload_file'))
+            return redirect(url_for('upload.file_uploaded', file_code=file_code))
 
     return render_template("home.html")
+
+@upload.route("/success/<file_code>", methods=["GET"])
+def file_uploaded(file_code):
+    return render_template("uploaded.html", file_code=file_code) 
 
 @upload.errorhandler(413)
 def request_entity_too_large(error):
@@ -51,7 +54,7 @@ def show_files():
     directory = os.listdir(DOWNLOAD_DIR)
     return render_template("downloads.html", directory=directory)
 
-@download.route("/<filename>", methods=["GET"])
+@download.route("/name/<filename>", methods=["GET"])
 def download_files(filename):
     DOWNLOAD_DIR = current_app.config['UPLOAD_FOLDER']
     path = DOWNLOAD_DIR + "/" + filename
@@ -65,9 +68,45 @@ def download_files(filename):
                 db.session.commit()
         except Exception as e:
             flash("Error")
-        
-        os.remove(path)
+            
+        if filename != ".gitkeep":
+            os.remove(path)
 
         return response
 
     return send_file(path, as_attachment=True)
+
+@download.route("/id/<file_code>", methods=["GET"])
+def download_file(file_code):
+    DOWNLOAD_DIR = current_app.config['UPLOAD_FOLDER']
+
+    try:
+        file_info = Files.query.filter_by(file_code=file_code).first()
+        if file_info:
+            filename = file_info.filename
+        else:
+            flash("File not found! Upload and try again!")
+            return redirect(url_for('upload.upload_file'))
+    except Exception as e:
+        flash("Error")
+        return redirect(url_for('upload.upload_file'))
+
+    path = DOWNLOAD_DIR + "/" + filename
+    
+    @after_this_request
+    def delete_file(response):
+        try:
+            file_entry = Files.query.filter_by(filename=filename).first()
+            if file_entry and filename != ".gitkeep":
+                db.session.delete(file_entry)
+                db.session.commit()
+        except Exception as e:
+            flash("Error")
+
+        if filename != ".gitkeep":
+            os.remove(path)
+
+        return response
+    
+    return send_file(path, as_attachment=True)
+    
