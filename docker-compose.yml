@@ -2,14 +2,12 @@
 services:
   nginx:
     build: ./nginx
-    networks:
-      - files
     ports:
       - 80:80
     depends_on:
       - app
-    environment:
-      - VIRTUAL_HOST=files.cristibtz.live
+    networks:
+      - web
 
   app:
     restart: always
@@ -29,6 +27,8 @@ services:
       - ./Project:/app
     depends_on:
       - db
+    networks:
+      - web
     command: > 
       sh -c "python3 ./create_db.py && gunicorn -w 8 -b :5000 wsgi:app --worker-class=gevent --timeout=60"
 
@@ -44,10 +44,10 @@ services:
         POSTGRES_DB: ${POSTGRES_DB}
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - web
 volumes:
   postgres-data:
 
 networks:
-  files:
-    external: true
-    name: files_default
+  - web
