@@ -11,18 +11,14 @@ class User(UserMixin):
         self.username = username
         self.password = password
 
-# Create a list of users
-users = []
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 
-    # Access the configuration values within the application context
     username_config = current_app.config['USERNAME']
     password_config = current_app.config['SECRET_KEY']
 
-    # Populate the users list with the configuration values
-    users.append(User(id=1, username=username_config, password=password_config))
+    user = User(id=1, username=username_config, password=password_config)
 
     if request.method == 'POST':
         username = request.form['username']
