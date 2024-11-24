@@ -50,4 +50,4 @@ volumes:
   postgres-data:
 
 networks:
-  - web
+  web:
