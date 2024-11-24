@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify, current_app, flash, redirect, url
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from .config import BaseConfig
 
-
 auth = Blueprint('auth', __name__)
 
 class User(UserMixin):
@@ -11,23 +10,21 @@ class User(UserMixin):
         self.username = username
         self.password = password
 
+def get_user():
+    username = current_app.config['USERNAME']
+    password = current_app.config['SECRET_KEY']
+    return User(id=1, username=username, password=password)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-
-    username_config = current_app.config['USERNAME']
-    password_config = current_app.config['SECRET_KEY']
-
-    user = User(id=1, username=username_config, password=password_config)
-
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        for user in users:
-            if user.username == username and user.password == password:
-                login_user(user)
-                flash('Logged in successfully.')
-                return redirect(url_for('upload.upload_file'))
+        user = get_user()
+        if user.username == username and user.password == password:
+            login_user(user)
+            flash('Logged in successfully.')
+            return redirect(url_for('upload.upload_file'))
         flash('Invalid username or password.')
         return redirect(url_for('auth.login'))
     return render_template('login.html')

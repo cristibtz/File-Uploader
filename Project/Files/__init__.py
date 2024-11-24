@@ -19,15 +19,15 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     from .routes import upload, download
-    from .auth import auth, users
+    from .auth import auth, get_user
 
     login_manager.login_view = "auth.login"
 
     @login_manager.user_loader
     def load_user(user_id):
-        for user in users:
-            if user.id == int(user_id):
-                return user
+        user = get_user()
+        if user.id == int(user_id):
+            return user
         return None
 
     app.register_blueprint(auth, url_prefix="/auth")
