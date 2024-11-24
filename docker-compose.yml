@@ -3,7 +3,7 @@ services:
   nginx:
     build: ./nginx
     networks:
-      - files_default
+      - files
     ports:
       - 80:80
     depends_on:
