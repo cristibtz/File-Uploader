@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, current_app, send_file, after_this_request, url_for, jsonify
 from werkzeug.utils import secure_filename
 from .models import Files
+from flask_login import login_required
 from .create_code import create_code
 from . import db
 import os, random
@@ -9,6 +10,7 @@ upload = Blueprint('upload', __name__)
 download = Blueprint('download', __name__)
 
 @upload.route("/", methods=["GET", "POST"])
+@login_required
 def upload_file():
     UPLOAD_DIR = current_app.config['UPLOAD_FOLDER']
     if request.method == "POST":
@@ -41,6 +43,7 @@ def upload_file():
     return render_template("home.html")
 
 @upload.route("/success/<file_code>", methods=["GET"])
+@login_required
 def file_uploaded(file_code):
     return render_template("uploaded.html", file_code=file_code) 
 
@@ -49,6 +52,7 @@ def request_entity_too_large(error):
     return "File is too large" 
 
 @download.route("/", methods=["GET"])
+@login_required
 def show_files():
     DOWNLOAD_DIR = current_app.config['UPLOAD_FOLDER']
     directory = os.listdir(DOWNLOAD_DIR)

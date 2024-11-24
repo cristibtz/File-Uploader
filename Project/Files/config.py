@@ -2,6 +2,7 @@ import os
 
 class BaseConfig(object):
     DEBUG = os.environ['DEBUG']
+    USERNAME = os.environ['USERNAME']
     SECRET_KEY = os.environ['SECRET_KEY']
     DB_NAME = os.environ['POSTGRES_DB']
     DB_USER = os.environ['POSTGRES_USER']
