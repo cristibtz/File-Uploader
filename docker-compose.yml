@@ -2,6 +2,8 @@
 services:
   nginx:
     build: ./nginx
+    networks:
+      - files_default
     ports:
       - 80:80
     depends_on:
@@ -44,3 +46,8 @@ services:
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 volumes:
   postgres-data:
+
+networks:
+  files:
+    external: true
+    name: files_default
