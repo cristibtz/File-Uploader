@@ -6,6 +6,8 @@ services:
       - 80:80
     depends_on:
       - app
+    environment:
+      - VIRTUAL_HOST=files.cristibtz.live
 
   app:
     restart: always
