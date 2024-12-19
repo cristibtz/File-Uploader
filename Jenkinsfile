@@ -6,10 +6,6 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh '''
-                #!/bin/bash
-                cd /home/cristibtz/Flask-Postgres-Docker-App && sudo -u cristibtz /usr/bin/git pull
-                '''
             }
         }
 
@@ -23,7 +19,7 @@ pipeline {
             steps {
                 echo 'Deploying application...'
                 sh '''
-                cd /home/cristibtz/Flask-Postgres-Docker-App && sudo -u cristibtz /usr/bin/docker compose up --build -d
+                docker compose up --build -d
                 '''
             }
         }
