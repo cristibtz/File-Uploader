@@ -6,6 +6,10 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
+                sh '''
+                #!/bin/bash
+                cd /home/cristibtz/Flask-Postgres-Docker-App/.env .
+                '''
             }
         }
 
