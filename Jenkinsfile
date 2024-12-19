@@ -8,7 +8,7 @@ pipeline {
                 echo 'Building...'
                 sh '''
                 #!/bin/bash
-                cd /home/cristibtz/Flask-Postgres-Docker-App/.env .
+                cp /home/cristibtz/Flask-Postgres-Docker-App/.env .
                 '''
             }
         }
