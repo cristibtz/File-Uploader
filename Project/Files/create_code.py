@@ -1,7 +1,6 @@
 import random
 import hashlib
 import base64
-import xor
 
 def create_code(filename):
     # Generate the sha256 hash of a radnom number
