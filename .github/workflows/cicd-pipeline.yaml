@@ -36,4 +36,4 @@ jobs:
         args: get pods -n file-uploader
       
     - name: Apply Kubernetes manifests
-      run: echo "Apply"
+      run: echo "Apply ."
