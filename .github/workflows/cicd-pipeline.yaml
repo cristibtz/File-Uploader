@@ -2,10 +2,7 @@ name: File CI/CD Pipeline
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
