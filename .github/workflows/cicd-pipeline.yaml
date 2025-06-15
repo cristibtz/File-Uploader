@@ -1,11 +1,22 @@
-name: File CI/CD Pipeline
+name: File Uploader CI/CD Pipeline
 on:
   push:
     branches:
       - master
 jobs:
-  build:
+  build-adn-deploy:
     runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: file-uploader
+      REGISTRY: docker.io/{{ secrets.DOCKER_USERNAME }}
+
     steps:
-    - name: Test
+    - name: Checkout code
+      run: echo "Running tests..."
+
+    - name: Login to container registry
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    
+    - name: test
       run: echo "Running tests..."
