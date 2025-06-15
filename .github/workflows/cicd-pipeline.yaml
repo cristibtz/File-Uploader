@@ -9,7 +9,7 @@ jobs:
 
     env:
       IMAGE_NAME: file-uploader
-      REGISTRY: docker.io/{{ secrets.DOCKER_USERNAME }}
+      REGISTRY: docker.io/${{ secrets.DOCKER_USERNAME }}
 
     steps:
     - name: Checkout code
