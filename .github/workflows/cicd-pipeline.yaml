@@ -29,7 +29,7 @@ jobs:
     needs: build
     steps:
     - name: Deploy to K8s
-    - uses: actions-hub/kubectl@master
+      uses: actions-hub/kubectl@master
       env:
         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       with:
