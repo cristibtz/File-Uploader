@@ -92,11 +92,11 @@ def download_file(file_code):
     "facebook"
     ]
 
-    if user_agent in prohibited_agents:
+    if any(agent in user_agent for agent in prohibited_agents):
         flash("Not supported")
         print("Prohibited user agent detected:", user_agent)
-        return redirect(url_for('upload.upload_file')), 204
-
+        return redirect(url_for('upload.upload_file'))
+        
     try:
         file_info = Files.query.filter_by(file_code=file_code).first()
         if file_info:
