@@ -84,6 +84,19 @@ def download_files(filename):
 def download_file(file_code):
     DOWNLOAD_DIR = current_app.config['UPLOAD_FOLDER']
 
+    user_agent = request.headers.get('User-Agent', '').lower()
+
+    prohibited_agents = [
+    "whatsapp", 
+    "WhatsApp/2.2523.1 W", 
+    "Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)",
+    "discordbot"
+    ]
+
+    if user_agent in prohibited_agents:
+        flash("Not supported")
+        return redirect(url_for('upload.upload_file')), 204
+
     try:
         file_info = Files.query.filter_by(file_code=file_code).first()
         if file_info:
