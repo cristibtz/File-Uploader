@@ -1,4 +1,4 @@
-# Flask-File-Transfer-App
+# Flask-File-Uploader
 
 ## HOW TO
 
@@ -17,4 +17,5 @@ DATABASE_PORT=5432
 ### 3. Go in the docker-compose.yml folder and run `docker compose up --build` and here you are! Also, add `-d` if you want to run it in the background.
 
 ### To access your containers shell, run:
+
 `docker exec -it container_name bash`
