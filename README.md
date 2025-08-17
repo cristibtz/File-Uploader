@@ -1,5 +1,7 @@
 # Flask-File-Uploader
 
+![Animation](Animation.gif)
+
 ## HOW TO
 
 ### 1. Make sure you have Docker and Docker Compose installed
